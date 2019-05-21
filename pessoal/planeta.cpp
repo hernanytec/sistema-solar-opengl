@@ -48,7 +48,7 @@ void Planeta::desenha(double rotationRate){
     glPushMatrix();
         Objeto::desenha();
         glTranslatef(index,0,0);
-        glRotated(rotationRate,0,0,1);
+        glRotated(-rotationRate,0,0,1);
 
         if(draw_sist_coord)
             GUI::drawOrigin(1);

@@ -21,6 +21,7 @@ double earth_translate_value;
 
 void desenha() {
     GUI::displayInit();
+    GUI::drawOrigin(1);
 
     GUI::setLight(1, 0, 0, 0, true, false);
 
@@ -48,7 +49,7 @@ void desenha() {
         glEnable(GL_COLOR_MATERIAL);
         glEnable (GL_TEXTURE_2D);
             glBindTexture (GL_TEXTURE_2D, sunTexture);
-            glRotatef(rotationRate/10.0,0,0,1);
+                glRotatef(-rotationRate/10.0,0,1,0);
             GUI::drawSphere(0, 0, 0, 0.6);
         glDisable(GL_TEXTURE_2D);
      glDisable(GL_COLOR_MATERIAL);
@@ -58,6 +59,7 @@ void desenha() {
     //desenhando órbita dos planetas
     for(int i = 1; i < 9; i++){
         glPushMatrix();
+            glRotatef(-90,1,0,0);
             glBegin(GL_LINE_LOOP);
             for(int j = 1; j <= 360; j++){
                 double angle = 2 * PI * j / 360;
@@ -89,6 +91,7 @@ void desenha() {
                 }
 
                 //rotaciona de acordo com o valor
+                glRotatef(-90,1,0,0);
                 glRotatef(p->translate_current_value_map[p->index], 0,0,1);
                 if(p->index == 3)
                     earth_translate_value = p->translate_current_value_map[p->index];
