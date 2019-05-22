@@ -26,6 +26,8 @@ bool pontual = true;
 float chao = -1.0;
 float lado = -9;
 float fundo = -9;
+float inclinado = 0;
+float offset = 0.001;
 //-------------------sombra-------------------
 
 
@@ -37,23 +39,31 @@ void desenha() {
 
     //Chão
     glPushMatrix();
-    glTranslated(0,chao-0.001,0);
+    glTranslated(0,chao-offset,0);
     GUI::drawFloor(20, 20);
     glPopMatrix();
 
     //fundo
     glPushMatrix();
-    glTranslated(fundo-0.001,4,0);
+    glTranslated(fundo-offset,4,0);
     glRotatef(-90,0,0,1);
     GUI::drawFloor(10, 20);
     glPopMatrix();
 
     //lado
     glPushMatrix();
-    glTranslated(0,4,lado-0.001);
+    glTranslated(0,4,lado-offset);
     glRotatef(90,1,0,0);
     GUI::drawFloor(20, 10);
     glPopMatrix();
+
+    //inclinado
+    glPushMatrix();
+    glTranslated(15,4,inclinado-offset);
+    glRotatef(45,0,0,1);
+    GUI::drawFloor(20, 20);
+    glPopMatrix();
+
 
     if(starsTexture == NULL)
         starsTexture = textureManager->LoadBitmap("textures/stars_milky_way.bmp");
@@ -151,11 +161,14 @@ void desenha() {
     GLfloat plano_0[4] = {0,1,0,-chao}; //chao
     GLfloat plano_1[4] = {0,0,1,-fundo}; //fundo
     GLfloat plano_2[4] = {1,0,0,-lado};   //lado
+    GLfloat plano_3[4] = {-1,1,0,11};   //inclinado
+
 
     vector<GLfloat*> vec_planos;
     vec_planos.push_back(plano_0);
     vec_planos.push_back(plano_1);
     vec_planos.push_back(plano_2);
+    vec_planos.push_back(plano_3);
 
     glDisable(GL_LIGHTING);
     glColor3d(0.0, 0.0, 0.0);
