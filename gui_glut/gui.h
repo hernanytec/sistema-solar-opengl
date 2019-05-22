@@ -41,6 +41,13 @@ class GUI {
         static void glReflectPlaneXZf(); //inverte sinal de Y
         static void glReflectPlaneXYf(); //inverte sinal de Z
 
+
+        //-------------------sombra-------------------
+        static void shadowMatrixYk(GLfloat shadowMat[4][4], GLfloat lightpos[4], GLfloat k);
+        static void shadowMatrix(GLfloat shadowMat[4][4], GLfloat groundplane[4], GLfloat lightpos[4]);
+        //-------------------sombra-------------------
+
+
         static void drawSphere(float x, float y, float z, float radius);
         static void drawQuad(float width = 5.0, float height = 5.0, float discrWidth = 0.3, float discrHeight = 0.3, float texWidth = 5.0, float texHeight = 5.0, bool inverted = false);
         static void drawOriQuad(float angle = 0.0, float ex = 1.0, float ey = 0.0, float ez = 0.0, float width = 5.0, float height = 5.0, float discrWidth = 0.3, float discrHeight = 0.3, float texWidth = 5.0, float texHeight = 5.0, bool inverted = false);

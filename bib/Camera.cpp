@@ -6,9 +6,9 @@ Camera::Camera()
   c = Vetor3D();
   u = Vetor3D();
 
-  e.x=0;
-  e.y=-7;
-  e.z=2.5;
+  e.x=16;
+  e.y=21;
+  e.z=27;
 
   c.x=0;
   c.y=1;
