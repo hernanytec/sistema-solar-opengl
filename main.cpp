@@ -20,9 +20,12 @@ int rotationRate = 1;
 double earth_translate_value;
 
 //-------------------sombra-------------------
-bool drawShadow = true;
+bool drawShadow = false;
 bool pontual = true;
-float k = -1.0;
+
+float chao = -1.0;
+float lado = -9;
+float fundo = -9;
 //-------------------sombra-------------------
 
 
@@ -30,28 +33,40 @@ void desenha() {
     GUI::displayInit();
     GUI::drawOrigin(1);
 
-   // GUI::setLight(1, 0, 0, 0, true, false);
     GUI::setLight(0,-1,2,1,true,false,false,false,pontual);
 
+    //Chão
     glPushMatrix();
-        //-------------------sombra-------------------
-        glTranslated(0.0,k-0.001,0.0);
-        GUI::drawFloor(30, 30);
-        //-------------------sombra-------------------
+    glTranslated(0,chao-0.001,0);
+    GUI::drawFloor(20, 20);
     glPopMatrix();
 
-     if(starsTexture == NULL)
+    //fundo
+    glPushMatrix();
+    glTranslated(fundo-0.001,4,0);
+    glRotatef(-90,0,0,1);
+    GUI::drawFloor(10, 20);
+    glPopMatrix();
+
+    //lado
+    glPushMatrix();
+    glTranslated(0,4,lado-0.001);
+    glRotatef(90,1,0,0);
+    GUI::drawFloor(20, 10);
+    glPopMatrix();
+
+    if(starsTexture == NULL)
         starsTexture = textureManager->LoadBitmap("textures/stars_milky_way.bmp");
 
     //Desenhando fundo estrelado
     glPushMatrix();
-        glDisable(GL_CULL_FACE);
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable (GL_TEXTURE_2D);
-            glBindTexture (GL_TEXTURE_2D, starsTexture);
-            GUI::drawSphere(0, 0, 0, 100);
-        glDisable(GL_TEXTURE_2D);
-     glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable (GL_TEXTURE_2D);
+    glBindTexture (GL_TEXTURE_2D, starsTexture);
+    GUI::drawSphere(0, 0, 0, 100);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
 
 
@@ -61,28 +76,28 @@ void desenha() {
 
     //desenhando sol e aplicando textura
     glPushMatrix();
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable (GL_TEXTURE_2D);
-            glBindTexture (GL_TEXTURE_2D, sunTexture);
-                glRotatef(-rotationRate/10.0,0,1,0);
-            GUI::drawSphere(0, 0, 0, 0.6);
-        glDisable(GL_TEXTURE_2D);
-     glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable (GL_TEXTURE_2D);
+    glBindTexture (GL_TEXTURE_2D, sunTexture);
+    glRotatef(-rotationRate/10.0,0,1,0);
+    GUI::drawSphere(0, 0, 0, 0.6);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
 
 
     //desenhando órbita dos planetas
     for(int i = 1; i < 9; i++){
         glPushMatrix();
-            glRotatef(-90,1,0,0);
-            glBegin(GL_LINE_LOOP);
-            for(int j = 1; j <= 360; j++){
-                double angle = 2 * PI * j / 360;
-                double x = i * cos(angle);
-                double y = i * sin(angle);
-                glVertex2d(x, y);
-            }
-            glEnd();
+        glRotatef(-90,1,0,0);
+        glBegin(GL_LINE_LOOP);
+        for(int j = 1; j <= 360; j++){
+            double angle = 2 * PI * j / 360;
+            double x = i * cos(angle);
+            double y = i * sin(angle);
+            glVertex2d(x, y);
+        }
+        glEnd();
         glPopMatrix();
     }
 
@@ -90,125 +105,91 @@ void desenha() {
     for (int i = 0; i < objetos.size(); i++) {
         if(objetos[i]->tipo == "planet"){
             glPushMatrix();
-                Planeta* p = dynamic_cast<Planeta*>(objetos[i]);
+            Planeta* p = dynamic_cast<Planeta*>(objetos[i]);
 
-                if(p->planet_texture == NULL){
-                    char * texture_path =  p->texture_name_map.find(p->index)->second;
-                    p->planet_texture = textureManager->LoadBitmap(texture_path);
-                }
+            if(p->planet_texture == NULL){
+                char * texture_path =  p->texture_name_map.find(p->index)->second;
+                p->planet_texture = textureManager->LoadBitmap(texture_path);
+            }
 
-                //se a translação estiver habilitada, faz as alterações necessárias
-                if(translation){
-                    int index = p->index;
-                    double v = p->translate_current_value_map[index];
-                    v += p->translate_rate_map[index];
-                    p->translate_current_value_map[index] = v;
-                }
+            //se a translação estiver habilitada, faz as alterações necessárias
+            if(translation){
+                int index = p->index;
+                double v = p->translate_current_value_map[index];
+                v += p->translate_rate_map[index];
+                p->translate_current_value_map[index] = v;
+            }
 
-                //rotaciona de acordo com o valor
-                glRotatef(-90,1,0,0);
-                glRotatef(p->translate_current_value_map[p->index], 0,0,1);
-                if(p->index == 3)
-                    earth_translate_value = p->translate_current_value_map[p->index];
-                glEnable ( GL_TEXTURE_2D );
-                    glBindTexture (GL_TEXTURE_2D, p->planet_texture);
-                    p->desenha(rotationRate/(double)p->index);
-                glDisable(GL_TEXTURE_2D);
+            //rotaciona de acordo com o valor
+            glRotatef(-90,1,0,0);
+            glRotatef(p->translate_current_value_map[p->index], 0,0,1);
+            if(p->index == 3)
+                earth_translate_value = p->translate_current_value_map[p->index];
+            glEnable ( GL_TEXTURE_2D );
+            glBindTexture (GL_TEXTURE_2D, p->planet_texture);
+            p->desenha(rotationRate/(double)p->index);
+            glDisable(GL_TEXTURE_2D);
             glPopMatrix();
         }
         else if(objetos[i]->tipo == "astronaut"){
             Astronauta* ast = dynamic_cast<Astronauta*>(objetos[i]);
             glPushMatrix();
-                ast->t.x -= 0.005;
-                glRotatef(earth_translate_value,0,0,1);
-                if(ast->t.x > -3)
+            ast->t.x -= 0.005;
+            glRotatef(earth_translate_value,0,0,1);
+            if(ast->t.x > -3)
                 ast->desenha(rotationRate);
             glPopMatrix();
         }
     }
 
 
-
     //-------------------sombra-------------------
+
     //definindo a luz que sera usada para gerar a sombra
     float lightPos[4] = {-1+glutGUI::lx,2+glutGUI::ly,1+glutGUI::lz,pontual};
-    //GUI::setLight(0,lightPos[0],lightPos[1],lightPos[2],true,false,false,false,pontual);
-    //GUI::setLight(0,-1,2,1,true,false,false,false,pontual);
-    //desenhando os objetos projetados
-    glPushMatrix();
-        //matriz p multiplicar tudo por -1
-            //float neg[16] = {
-            //                   -1.0, 0.0, 0.0, 0.0,
-            //                    0.0,-1.0, 0.0, 0.0,
-            //                    0.0, 0.0,-1.0, 0.0,
-            //                    0.0, 0.0, 0.0,-1.0
-            //                };
-            //glMultTransposeMatrixf( neg );
-        //matriz de projecao para gerar sombra no plano y=k
-            GLfloat sombra[4][4];
-            GUI::shadowMatrixYk(sombra,lightPos,k);
 
-            //GLfloat plano[4] = {0,1,0,-k};
-            //GUI::shadowMatrix(sombra,plano,lightPos);
-            glMultTransposeMatrixf( (GLfloat*)sombra );
+    GLfloat plano_0[4] = {0,1,0,-chao}; //chao
+    GLfloat plano_1[4] = {0,0,1,-fundo}; //fundo
+    GLfloat plano_2[4] = {1,0,0,-lado};   //lado
 
-        glDisable(GL_LIGHTING);
-        glColor3d(0.0,0.0,0.0);
+    vector<GLfloat*> vec_planos;
+    vec_planos.push_back(plano_0);
+    vec_planos.push_back(plano_1);
+    vec_planos.push_back(plano_2);
+
+    glDisable(GL_LIGHTING);
+    glColor3d(0.0, 0.0, 0.0);
+
+    for(int k = 0; k < vec_planos.size(); k++){
+        glPushMatrix();
+        GLfloat sombra[4][4];
+
+        GUI::shadowMatrix(sombra,vec_planos[k],lightPos);
+        glMultTransposeMatrixf((GLfloat*)sombra );
+
         if (drawShadow) {
             bool aux = glutGUI::draw_eixos;
             glutGUI::draw_eixos = false;
-            //Desenhando o vetor de objetos
+
+            //Desenhando planetas
             for (int i = 0; i < objetos.size(); i++) {
                 if(objetos[i]->tipo == "planet"){
                     glPushMatrix();
-                        Planeta* p = dynamic_cast<Planeta*>(objetos[i]);
+                    Planeta* p = dynamic_cast<Planeta*>(objetos[i]);
 
-                        if(p->planet_texture == NULL){
-                            char * texture_path =  p->texture_name_map.find(p->index)->second;
-                            p->planet_texture = textureManager->LoadBitmap(texture_path);
-                        }
-
-                        //se a translação estiver habilitada, faz as alterações necessárias
-                        if(translation){
-                            int index = p->index;
-                            double v = p->translate_current_value_map[index];
-                            v += p->translate_rate_map[index];
-                            p->translate_current_value_map[index] = v;
-                        }
-
-                        //rotaciona de acordo com o valor
-                        glRotatef(-90,1,0,0);
-                        glRotatef(p->translate_current_value_map[p->index], 0,0,1);
-                        if(p->index == 3)
-                            earth_translate_value = p->translate_current_value_map[p->index];
-                        glEnable ( GL_TEXTURE_2D );
-                            glBindTexture (GL_TEXTURE_2D, p->planet_texture);
-                            p->desenha(rotationRate/(double)p->index);
-                        glDisable(GL_TEXTURE_2D);
-                    glPopMatrix();
-                }
-                else if(objetos[i]->tipo == "astronaut"){
-                    Astronauta* ast = dynamic_cast<Astronauta*>(objetos[i]);
-                    glPushMatrix();
-                        ast->t.x -= 0.005;
-                        glRotatef(earth_translate_value,0,0,1);
-                        if(ast->t.x > -3)
-                        ast->desenha(rotationRate);
+                    glRotatef(-90,1,0,0);
+                    glRotatef(p->translate_current_value_map[p->index], 0,0,1);
+                    p->desenha(rotationRate/(double)p->index);
                     glPopMatrix();
                 }
             }
-
             glutGUI::draw_eixos = aux;
         }
-        glEnable(GL_LIGHTING);
-        //glDisable(GL_LIGHTING);
-        //glColor3d(0.0,0.0,0.0);
-        //if (drawShadow) desenhaObjetosComSombra();
-        //glEnable(GL_LIGHTING);
+        glPopMatrix();
+    }
+    glEnable(GL_LIGHTING);
     glPopMatrix();
-    //-------------------sombra-------------------
-
-
+    //-------------------sombra-------------------//
 
     if (posSelecionado >= 0 and posSelecionado < (int) objetos.size()) {
 
@@ -289,16 +270,19 @@ void teclado(unsigned char key, int x, int y) {
             objetos.push_back( new Planeta(i));
         }
         break;
+    case 'S':
+        drawShadow =  !drawShadow;
+        break;
     case 'a':
         objetos.push_back(new Astronauta());
         break;
     case 'A':
-            for(Objeto* obj: objetos){
-                if(obj->tipo == "planet"){
-                    Planeta* p =  dynamic_cast<Planeta*>(obj);
-                    p->t.x = 0;
-                    p->t.y = 0;
-                    p->translate_current_value_map[p->index] = 0;
+        for(Objeto* obj: objetos){
+            if(obj->tipo == "planet"){
+                Planeta* p =  dynamic_cast<Planeta*>(obj);
+                p->t.x = 0;
+                p->t.y = 0;
+                p->translate_current_value_map[p->index] = 0;
             }
         }
         break;

@@ -22,8 +22,8 @@ Axis glutGUI::axis = AXIS_Y;
 int glutGUI::nIterations = 10;
 
 
-int glutGUI::slices = 100; //400;//16;
-int glutGUI::stacks = 200; //400;//16;
+int glutGUI::slices = 36; //400;//16;
+int glutGUI::stacks = 100; //400;//16;
 
 int glutGUI::posCam = 0;
 
@@ -246,6 +246,16 @@ void glutGUI::defaultKey(unsigned char key, int x, int y)
         savedCamera[6] = cam->u.x;
         savedCamera[7] = cam->u.y;
         savedCamera[8] = cam->u.z;
+
+        cout << cam->e.x << endl;
+        cout << cam->e.y << endl;
+        cout << cam->e.z << endl;
+        cout << cam->c.x << endl;
+        cout << cam->c.y << endl;
+        cout << cam->c.z << endl;
+        cout << cam->u.x << endl;
+        cout << cam->u.y << endl;
+        cout << cam->u.z << endl;
         break;
 
     case 'm':
