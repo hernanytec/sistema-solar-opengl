@@ -186,7 +186,7 @@ void desenha() {
 
             //Desenhando planetas
             for (int i = 0; i < objetos.size(); i++) {
-                if(objetos[i]->tipo == "planet"){
+                if(objetos[i]->tipo == "planet" && objetos[i]->draw_shadow){
                     glPushMatrix();
                     Planeta* p = dynamic_cast<Planeta*>(objetos[i]);
 
@@ -297,6 +297,11 @@ void teclado(unsigned char key, int x, int y) {
                 p->t.y = 0;
                 p->translate_current_value_map[p->index] = 0;
             }
+        }
+        break;
+    case 'k':
+        if (posSelecionado >= 0 and posSelecionado < (int) objetos.size()) {
+            objetos[posSelecionado]->draw_shadow = !objetos[posSelecionado]->draw_shadow;
         }
         break;
     case 'd':

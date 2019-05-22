@@ -12,6 +12,7 @@ public:
 
     bool selecionado = false;
     bool draw_sist_coord = false;
+    bool draw_shadow = true;
     string tipo = "objeto";
 public:
     Objeto();
