@@ -35,7 +35,9 @@ void desenha() {
     GUI::displayInit();
     GUI::drawOrigin(1);
 
-    GUI::setLight(0,-1,2,1,true,false,false,false,pontual);
+    //GUI::setLight(0,-1,2,1,true,false,false,false,pontual);
+    GUI::setLight(0,0,.5,0,true,false,false,false,pontual);
+
 
     //Chão
     glPushMatrix();
@@ -303,6 +305,9 @@ void teclado(unsigned char key, int x, int y) {
         if (posSelecionado >= 0 and posSelecionado < (int) objetos.size()) {
             objetos[posSelecionado]->draw_shadow = !objetos[posSelecionado]->draw_shadow;
         }
+        break;
+    case 'p':
+        glutGUI::projection = (glutGUI::projection+1) % 3;
         break;
     case 'P':
         pontual = !pontual;

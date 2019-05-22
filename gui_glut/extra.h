@@ -31,7 +31,7 @@ public:
     static int width;// = 400;
     static int height;// = 300;
 
-    static bool perspective;// = true;
+    static int projection;// = 0
 
     static bool lbpressed;// = false;
     static bool mbpressed;// = false;

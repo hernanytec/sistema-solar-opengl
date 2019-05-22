@@ -3,7 +3,7 @@
 int glutGUI::width = 400;
 int glutGUI::height = 300;
 
-bool glutGUI::perspective = true;
+int glutGUI::projection = 0;
 
 bool glutGUI::lbpressed = false;
 bool glutGUI::mbpressed = false;
@@ -23,7 +23,7 @@ int glutGUI::nIterations = 10;
 
 
 int glutGUI::slices = 36; //400;//16;
-int glutGUI::stacks = 100; //400;//16;
+int glutGUI::stacks = 36; //400;//16;
 
 int glutGUI::posCam = 0;
 
@@ -194,10 +194,6 @@ void glutGUI::defaultKey(unsigned char key, int x, int y)
         break;
     case 'f':
         glutReshapeWindow(800,600);
-        break;
-
-    case 'o':
-        glutGUI::perspective = !glutGUI::perspective;
         break;
 
     //case 'l':
