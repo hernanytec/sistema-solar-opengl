@@ -21,6 +21,7 @@ double earth_translate_value;
 
 //-------------------sombra-------------------
 bool drawShadow = false;
+bool drawPlane = false;
 bool pontual = true;
 
 float chao = -1.0;
@@ -30,6 +31,8 @@ float inclinado = 0;
 float offset = 0.001;
 //-------------------sombra-------------------
 
+//------projeções----
+bool drawCube = false;
 
 void desenha() {
     GUI::displayInit();
@@ -40,12 +43,15 @@ void desenha() {
 
 
     //cubo
-    glPushMatrix();
+    if(drawCube){
+        glPushMatrix();
 
         glTranslatef(1,1,0);
         glRotatef(45,0,1,0);
-        GUI::drawBox(0,0,0,1,1,1);
-    glPopMatrix();
+        GUI::drawBox(0,0,0,1,1,1,true);
+        glPopMatrix();
+    }
+
     //Chão
     glPushMatrix();
     glTranslated(0,chao-offset,0);
@@ -312,6 +318,9 @@ void teclado(unsigned char key, int x, int y) {
         if (posSelecionado >= 0 and posSelecionado < (int) objetos.size()) {
             objetos[posSelecionado]->draw_shadow = !objetos[posSelecionado]->draw_shadow;
         }
+        break;
+    case 'c':
+        drawCube =  !drawCube;
         break;
     case 'p':
         glutGUI::projection = (glutGUI::projection+1) % 3;
