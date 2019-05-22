@@ -124,17 +124,19 @@ void GUI::displayInit()
         //matriz de cisalhamento (projecao obliqua)
         float alfa = 45;
         alfa = alfa*(PI/180); //grau2rad
-        float phi = -45; //-60; //-30 //-90
+        float phi = -90; //-60; //-30 //-90
         phi = phi*(PI/180); //grau2rad
         //float d = 1.0; //1.0/2.0;
         float transform[16] = {
-            1.0,    0.0,    1.0/tan(alfa),   0.0,
-            0.0,    1.0,    1.0/tan(phi),    0.0,
-            0.0,    0.0,    1.0,             0.0,
-            0.0,    0.0,    0.0,             1.0
+            1, 0, 1/tan(alfa), 0,
+            0, 1, 1/tan(phi), 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
         };
-        glMultTransposeMatrixf( transform );
+
+        //multiplicando
         glOrtho(-orthof*w,orthof*w,-orthof*h,orthof*h,0.0,100.0);
+        glMultTransposeMatrixf( transform );
     }
     default:
         break;

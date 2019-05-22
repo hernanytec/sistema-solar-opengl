@@ -39,6 +39,13 @@ void desenha() {
     GUI::setLight(0,0,.5,0,true,false,false,false,pontual);
 
 
+    //cubo
+    glPushMatrix();
+
+        glTranslatef(1,1,0);
+        glRotatef(45,0,1,0);
+        GUI::drawBox(0,0,0,1,1,1);
+    glPopMatrix();
     //Chão
     glPushMatrix();
     glTranslated(0,chao-offset,0);
