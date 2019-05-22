@@ -22,7 +22,7 @@ Axis glutGUI::axis = AXIS_Y;
 int glutGUI::nIterations = 10;
 
 
-int glutGUI::slices = 150; //400;//16;
+int glutGUI::slices = 100; //400;//16;
 int glutGUI::stacks = 200; //400;//16;
 
 int glutGUI::posCam = 0;
