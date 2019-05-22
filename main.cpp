@@ -304,6 +304,12 @@ void teclado(unsigned char key, int x, int y) {
             objetos[posSelecionado]->draw_shadow = !objetos[posSelecionado]->draw_shadow;
         }
         break;
+    case 'P':
+        pontual = !pontual;
+        break;
+    case 'l':
+        glutGUI::trans_luz = !glutGUI::trans_luz;
+        break;
     case 'd':
         if (posSelecionado >= 0 and posSelecionado < (int) objetos.size()) {
             objetos[posSelecionado]->draw_sist_coord = !objetos[posSelecionado]->draw_sist_coord;
