@@ -161,7 +161,7 @@ void desenha() {
     GLfloat plano_0[4] = {0,1,0,-chao}; //chao
     GLfloat plano_1[4] = {0,0,1,-fundo}; //fundo
     GLfloat plano_2[4] = {1,0,0,-lado};   //lado
-    GLfloat plano_3[4] = {-1,1,0,11};   //inclinado
+    GLfloat plano_3[4] = {-1,1,0,10.9};   //inclinado
 
 
     vector<GLfloat*> vec_planos;
