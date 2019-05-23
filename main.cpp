@@ -446,6 +446,11 @@ void menu(){
     cout << "9 - adiciona todos os planetas de uma vez\n";
     cout << "a - manda um astronauta da terra para o sol\n";
     cout << "t - inicia/para o movimento de translação dos planetas\n";
+    cout << "c - desenha um cubo próximo ao sol (apenas para testes de visualização)\n";
+    cout << "C - muda tipo de visão (câmera)\n";
+    cout << "p - altera o tipo de projeção(perspectiva, ortográfica, oblíqua)\n";
+    cout << "P - alterna entre luz pontual ou luz no infinito\n";
+    cout << "l - permite transladar ponto de luz (por padrão dentro do sol)\n";
     cout << "A - recoloca os planetas na posição incial\n";
     cout << "n para avançar e b para voltar na lista de objetos\n";
     cout << "   obs1: o objeto selecionado começará a piscar\n";
