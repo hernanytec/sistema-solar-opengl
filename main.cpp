@@ -45,12 +45,13 @@ void desenha() {
     //cubo
     if(drawCube){
         glPushMatrix();
-
         glTranslatef(1,1,0);
         glRotatef(45,0,1,0);
-        GUI::drawBox(0,0,0,1,1,1,true);
+        GUI::drawBox(0,0,0,1,1,1);
         glPopMatrix();
     }
+
+    GUI::setColor(1,0,0,.2);
 
     //Chão
     glPushMatrix();
@@ -453,7 +454,7 @@ void menu(){
     cout << "   d para desenhar/ocultar o sist. de coordenadas\n";
     cout << "   D para deletar o objeto\n";
     cout << "s - salva o estado atual da câmera\n";
-    cout << "C - alterna entre 3 posições diferentes de câmera (incluindo o estado salvo)\n";
+    cout << "C - alterna entre as posições diferentes de câmera (incluindo o estado salvo)\n";
     cout << "c - restaura para a câmera original\n";
     cout << "z/Z - zoom in/zoom out\n";
     cout << "w - salva o cenário em um arquivo\n";
