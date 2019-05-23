@@ -41,13 +41,13 @@ void GUI::GLUTInit()
 
 void GUI::GLInit()
 {
-   //
+    //
 
     //glClearColor(0.6,0.6,0.0,1.0);
     //glDisable(GL_TEXTURE_2D);
     //define a cor para limpar a imagem (cor de fundo)
 
-   glClearColor(0.6,0.6,0.0,1.0);
+    glClearColor(0.6,0.6,0.0,1.0);
 
     glColor3b(1,1,1);
     glEnable(GL_LIGHTING); //habilita iluminacao (chamada no setLight)
@@ -66,7 +66,7 @@ void GUI::GLInit()
     glEnable(GL_DEPTH_TEST);
     //glDepthFunc(GL_LESS);
 
-   // glEnable(GL_BLEND); //habilita a transparencia
+    // glEnable(GL_BLEND); //habilita a transparencia
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
@@ -107,17 +107,43 @@ void GUI::displayInit()
 
 
     glMatrixMode(GL_PROJECTION);
+    //glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (glutGUI::perspective)
+
+
+    switch (glutGUI::projection) {
+    case 0:
         gluPerspective(30.,ar,0.1,1000.);
-    else
+        break;
+    case 1:
         glOrtho(-orthof*w,orthof*w,-orthof*h,orthof*h,0.0,100.0);
+        break;
+    case 2:
+    {
+        //matriz de cisalhamento (projecao obliqua)
+        float alfa = 45;
+        alfa = alfa*(PI/180); //grau2rad
+        float phi = -90; //-60; //-30 //-90
+        phi = phi*(PI/180); //grau2rad
+        //float d = 1.0; //1.0/2.0;
+        float transform[16] = {
+            1, 0, 1/tan(alfa), 0,
+            0, 1, 1/tan(phi), 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        };
+
+        //multiplicando
+        glOrtho(-orthof*w,orthof*w,-orthof*h,orthof*h,0.0,100.0);
+        glMultTransposeMatrixf( transform );
+    }
+    default:
+        break;
+    }
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-
 
     //viewport unica
     glViewport(0, 0, glutGUI::width, glutGUI::height);
@@ -355,9 +381,9 @@ void GUI::shadowMatrix(GLfloat shadowMat[4][4], GLfloat groundplane[4], GLfloat 
 
     /* Find dot product between light position vector and ground plane normal. */
     dot = groundplane[X] * lightpos[X] +
-    groundplane[Y] * lightpos[Y] +
-    groundplane[Z] * lightpos[Z] +
-    groundplane[W] * lightpos[W];
+            groundplane[Y] * lightpos[Y] +
+            groundplane[Z] * lightpos[Z] +
+            groundplane[W] * lightpos[W];
 
     shadowMat[0][0] = dot - lightpos[X] * groundplane[X];
     shadowMat[0][1] = 0.f - lightpos[X] * groundplane[Y];
@@ -600,9 +626,9 @@ void GUI::drawScaledBox(float scale, float xmin, float ymin, float zmin, float x
 //desenha eixos do sistema de coordenadas atual (global, caso nao esteja influenciado por transformacoes)
 void GUI::drawOrigin(float tamanho)
 {
-        glPushMatrix();
-            if (glutGUI::draw_eixos) Desenha::drawEixos( tamanho );
-        glPopMatrix();
+    glPushMatrix();
+    if (glutGUI::draw_eixos) Desenha::drawEixos( tamanho );
+    glPopMatrix();
 }
 
 void GUI::drawCamera(float tamanho) {

@@ -3,7 +3,7 @@
 int glutGUI::width = 400;
 int glutGUI::height = 300;
 
-bool glutGUI::perspective = true;
+int glutGUI::projection = 0;
 
 bool glutGUI::lbpressed = false;
 bool glutGUI::mbpressed = false;
@@ -23,7 +23,7 @@ int glutGUI::nIterations = 10;
 
 
 int glutGUI::slices = 36; //400;//16;
-int glutGUI::stacks = 100; //400;//16;
+int glutGUI::stacks = 36; //400;//16;
 
 int glutGUI::posCam = 0;
 
@@ -105,76 +105,76 @@ void glutGUI::defaultDisplay() {
     gluLookAt(cam->e.x,cam->e.y,cam->e.z, cam->c.x,cam->c.y,cam->c.z, cam->u.x,cam->u.y,cam->u.z);
 
     //LIGHT0
-        //habilita luz
-        glEnable(GL_LIGHT0);
-        //definindo intensidades de cor da luz
-        GLfloat light_ambient[]  = { 0.2f, 0.2f, 0.2f, 1.0f };
-        GLfloat light_diffuse[]  = { 0.7f, 0.7f, 0.7f, 1.0f };
-        GLfloat light_specular[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-        glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-        //posicionando a luz
-        GLfloat light_position[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-        glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-        //desenha uma esfera representando a luz
-        glDisable(GL_LIGHTING);
-        glColor4f(1.0,1.0,1.0,1.0);
-        glPushMatrix();
-            glTranslatef(light_position[0],light_position[1],light_position[2]);
-            glutSolidSphere(0.02,slices,stacks);
-        glPopMatrix();
-        glEnable(GL_LIGHTING);
+    //habilita luz
+    glEnable(GL_LIGHT0);
+    //definindo intensidades de cor da luz
+    GLfloat light_ambient[]  = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat light_diffuse[]  = { 0.7f, 0.7f, 0.7f, 1.0f };
+    GLfloat light_specular[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    //posicionando a luz
+    GLfloat light_position[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    //desenha uma esfera representando a luz
+    glDisable(GL_LIGHTING);
+    glColor4f(1.0,1.0,1.0,1.0);
+    glPushMatrix();
+    glTranslatef(light_position[0],light_position[1],light_position[2]);
+    glutSolidSphere(0.02,slices,stacks);
+    glPopMatrix();
+    glEnable(GL_LIGHTING);
 
     //desenha sistema de coordenadas global
-        //glPushMatrix();
-        //if (draw_eixos) Desenha::drawEixos(0.1);
-        //glPopMatrix();
+    //glPushMatrix();
+    //if (draw_eixos) Desenha::drawEixos(0.1);
+    //glPopMatrix();
 
     //define cor
-        GLfloat mat_ambient[]    = { 0.4, 0.2, 0.1, 1.0 };
-        GLfloat mat_diffuse[]    = { 0.8, 0.4, 0.1, 1.0 };
-        GLfloat mat_specular[]   = { 1.0, 1.0, 1.0, 1.0 };
-        GLfloat high_shininess[] = { 100.0f };
+    GLfloat mat_ambient[]    = { 0.4, 0.2, 0.1, 1.0 };
+    GLfloat mat_diffuse[]    = { 0.8, 0.4, 0.1, 1.0 };
+    GLfloat mat_specular[]   = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat high_shininess[] = { 100.0f };
 
-        glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
-        glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
-        glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
-        glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
     //desenha chao
-        glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
 
-        //int discr = 1;
-        //Desenha::drawGrid( 5/discr, 0, 5/discr, discr );
+    //int discr = 1;
+    //Desenha::drawGrid( 5/discr, 0, 5/discr, discr );
 
-        glPushMatrix();
-            glTranslated(0.,-0.0001,0.);
-            float width = 5.0;
-            float height = 5.0;
-            float discrWidth = 0.03;
-            float discrHeight = 0.03;
-            int nWidth = width/discrWidth;
-            int nHeight = height/discrHeight;
-            discrWidth = width/nWidth; //correcao necessaria, pois, caso width/discrWidth nao seja inteiro, nWidth*discrWidth (feito pelo for) nao completara exatamente a width
-            discrHeight = height/nHeight; //correcao necessaria, pois, caso height/discrHeight nao seja inteiro, nHeight*discrHeight (feito pelo for) nao completara exatamente a height
-            for(float i=-0.5*(width/discrWidth);i<0.5*(width/discrWidth);i++) {
-                for(float j=-0.5*(height/discrHeight);j<0.5*(height/discrHeight);j++) {
-                    glPushMatrix();
-                        glTranslatef(i*discrWidth,0.0,j*discrHeight);
-                        glBegin( GL_QUADS );
-                            glNormal3f(0.,1.,0.);
-                                glVertex3f(        0.0,0.0,+discrHeight);
-                                glVertex3f(+discrWidth,0.0,+discrHeight);
-                                glVertex3f(+discrWidth,0.0,         0.0);
-                                glVertex3f(        0.0,0.0,         0.0);
-                        glEnd();
-                    glPopMatrix();
-                }
-            }
-        glPopMatrix();
+    glPushMatrix();
+    glTranslated(0.,-0.0001,0.);
+    float width = 5.0;
+    float height = 5.0;
+    float discrWidth = 0.03;
+    float discrHeight = 0.03;
+    int nWidth = width/discrWidth;
+    int nHeight = height/discrHeight;
+    discrWidth = width/nWidth; //correcao necessaria, pois, caso width/discrWidth nao seja inteiro, nWidth*discrWidth (feito pelo for) nao completara exatamente a width
+    discrHeight = height/nHeight; //correcao necessaria, pois, caso height/discrHeight nao seja inteiro, nHeight*discrHeight (feito pelo for) nao completara exatamente a height
+    for(float i=-0.5*(width/discrWidth);i<0.5*(width/discrWidth);i++) {
+        for(float j=-0.5*(height/discrHeight);j<0.5*(height/discrHeight);j++) {
+            glPushMatrix();
+            glTranslatef(i*discrWidth,0.0,j*discrHeight);
+            glBegin( GL_QUADS );
+            glNormal3f(0.,1.,0.);
+            glVertex3f(        0.0,0.0,+discrHeight);
+            glVertex3f(+discrWidth,0.0,+discrHeight);
+            glVertex3f(+discrWidth,0.0,         0.0);
+            glVertex3f(        0.0,0.0,         0.0);
+            glEnd();
+            glPopMatrix();
+        }
+    }
+    glPopMatrix();
 
-        glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     glutSwapBuffers();
 }
@@ -195,43 +195,37 @@ void glutGUI::defaultKey(unsigned char key, int x, int y)
     case 'f':
         glutReshapeWindow(800,600);
         break;
-
-    case 'o':
-        glutGUI::perspective = !glutGUI::perspective;
-        break;
-
-    //case 'l':
-    //    enabled_light[7] = !enabled_light[7];
-    //    break;
-    //case '0'...'7':
-     //   enabled_light[key-'0'] = !enabled_light[key-'0'];
-      //  break;
-
-    case 'c':
-        posCam = 1;
-        delete cam;
-        cam = new CameraDistante(); //CameraDistante(0,1,5, 0,1,0, 0,1,0);
-        break;
     case 'j':
         posCam = 1;
         delete cam;
         cam = new CameraJogo(); //CameraDistante(0,1,5, 0,1,0, 0,1,0);
         break;
     case 'C':
-      posCam = (posCam+1)%4;
+        posCam = (posCam+1)%5;
         delete cam;
+        //novas posições de câmera//
         switch (posCam) {
         case 0:
-            cam = new CameraDistante(savedCamera[0],savedCamera[1],savedCamera[2],savedCamera[3],savedCamera[4],savedCamera[5],savedCamera[6],savedCamera[7],savedCamera[8]);
+            //---posterior---
+            cam = new CameraDistante(1.64,0.92,-6.55, 1.97,0.75,-0.16, 0,1,0);
             break;
         case 1:
-            cam = new CameraDistante(0,0,30, 0,1,0, 0,1,0);
+            //---frontal---
+            cam = new CameraDistante(2.31,0.97,6.23, 1.97,0.75,-0.16, 0,1,0);
             break;
         case 2:
-            cam = new CameraDistante(-0.27,-3.33,0.55, 0,1,0, 0,1,0);
+            //---lateral direita---
+            cam = new CameraDistante(8.36,0.90,-0.48, 1.97,0.75,-0.16, 0,1,0);
             break;
         case 3:
-            cam = new CameraDistante(6.06,-0.58,0.9, 0,1,0, 0,1,0);
+            //---lateral esquerda---
+            cam = new CameraDistante(-4.42,0.86,0.16, 1.97,0.75,-0.16, 0,1,0);
+            break;
+            //---inferior--
+            //o plano do chão atrapalha essa vizualizalçao
+        case 4:
+            //---superior---
+            cam = new CameraDistante(1.95,7.14,-0.37, 1.97,0.75,-0.16, 0,1,0);
             break;
         }
         break;
@@ -515,21 +509,21 @@ void glutGUI::composite()
 void glutGUI::showLocalAndGlobalCoords(float pl[4])
 {
     //imprimindo coords locais e coords globais
-      //locais
-        cout << "Coords locais: " << pl[0] << ", " << pl[1] << ", " << pl[2] << "\n";
-      //globais
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-            glLoadIdentity();
-                //composicao de transformacoes
-                composite();
-            //obtendo e mostrando a matriz de composicao (matriz modelView atual) no console
-            float compositeMatrix[16];
-            glGetFloatv(GL_MODELVIEW_MATRIX,compositeMatrix);
-            showGLMatrixIn2D(compositeMatrix);
-            //ponto em coords globais é obtido pelo ponto em coords locais transformado pela matriz de composicao
-            float pg[4];
-            multGLMatrixByVector(pg,compositeMatrix,pl);
-            cout << "Coords globais: " << pg[0] << ", " << pg[1] << ", " << pg[2] << "\n\n";
-        glPopMatrix();
+    //locais
+    cout << "Coords locais: " << pl[0] << ", " << pl[1] << ", " << pl[2] << "\n";
+    //globais
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    //composicao de transformacoes
+    composite();
+    //obtendo e mostrando a matriz de composicao (matriz modelView atual) no console
+    float compositeMatrix[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX,compositeMatrix);
+    showGLMatrixIn2D(compositeMatrix);
+    //ponto em coords globais é obtido pelo ponto em coords locais transformado pela matriz de composicao
+    float pg[4];
+    multGLMatrixByVector(pg,compositeMatrix,pl);
+    cout << "Coords globais: " << pg[0] << ", " << pg[1] << ", " << pg[2] << "\n\n";
+    glPopMatrix();
 }
