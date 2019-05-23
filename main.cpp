@@ -28,7 +28,7 @@ float chao = -1.0;
 float lado = -9;
 float fundo = -9;
 float inclinado = 0;
-float offset = 0.001;
+float offset = 0.01;
 //-------------------sombra-------------------
 
 //------projeções----
@@ -458,7 +458,9 @@ void menu(){
     cout << "com um objeto selecionado:\n";
     cout << "   d para desenhar/ocultar o sist. de coordenadas\n";
     cout << "   D para deletar o objeto\n";
+    cout << "   k para ativar/desativar a sombra\n";
     cout << "s - salva o estado atual da câmera\n";
+    cout << "S - ativa/desativa sombra em todos os objetos\n";
     cout << "C - alterna entre as posições diferentes de câmera (incluindo o estado salvo)\n";
     cout << "c - restaura para a câmera original\n";
     cout << "z/Z - zoom in/zoom out\n";
